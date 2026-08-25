@@ -18,10 +18,20 @@ function close() {
 
 <template>
   <Teleport to="body">
-    <Transition name="fade">
+    <Transition 
+      enter-active-class="transition-opacity duration-200 ease" 
+      leave-active-class="transition-opacity duration-200 ease" 
+      enter-from-class="opacity-0" 
+      leave-to-class="opacity-0"
+    >
       <div v-if="open" class="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm" @click="close"></div>
     </Transition>
-    <Transition name="slide-up">
+    <Transition 
+      enter-active-class="transition-all duration-200 ease-out" 
+      leave-active-class="transition-all duration-200 ease-out" 
+      enter-from-class="opacity-0 -translate-y-[45%] scale-95" 
+      leave-to-class="opacity-0 -translate-y-[45%] scale-95"
+    >
       <div v-if="open" class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
         <div class="flex flex-col space-y-1.5 text-center sm:text-left">
           <h2 v-if="title" class="text-lg font-semibold leading-none tracking-tight">{{ title }}</h2>
@@ -39,23 +49,3 @@ function close() {
   </Teleport>
 </template>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.2s ease-out;
-}
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translate(-50%, -45%) scale(0.95);
-}
-</style>
