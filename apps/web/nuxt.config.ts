@@ -20,14 +20,8 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/tailwindcss',
-    'shadcn-nuxt',
     '@pinia/nuxt'
   ],
-
-  shadcn: {
-    prefix: '',
-    componentDir: './shared/ui'
-  },
 
   tailwindcss: {
     cssPath: '~/app/assets/css/tailwind.css',

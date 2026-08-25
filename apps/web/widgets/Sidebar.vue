@@ -42,6 +42,5 @@ const { mutate: logout, isPending } = useLogoutMutation()
         <LogOut v-else class="h-5 w-5" />
         <span>{{ isPending ? 'Signing out...' : 'Logout' }}</span>
       </button>
-    </div>
   </aside>
 </template>
