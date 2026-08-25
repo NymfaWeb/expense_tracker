@@ -23,10 +23,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
 
-  build: {
-    transpile: ['shared']
-  },
-
   tailwindcss: {
     cssPath: '~/app/assets/css/tailwind.css',
     configPath: 'tailwind.config.ts',
