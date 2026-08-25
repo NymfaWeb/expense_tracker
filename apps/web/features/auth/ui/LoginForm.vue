@@ -32,7 +32,7 @@ const handleSubmit = () => {
             type="email" 
             placeholder="name@example.com" 
             required 
-            class="bg-black/50 border-white/20 text-white placeholder:text-zinc-500 focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf]/50 transition-all h-11"
+            class="w-full px-4 rounded-md bg-black/50 border border-white/20 text-white placeholder:text-zinc-500 focus:border-[#2dd4bf] focus:outline-none focus:ring-1 focus:ring-[#2dd4bf]/50 transition-all h-11"
           />
         </div>
         
@@ -46,7 +46,7 @@ const handleSubmit = () => {
             v-model="password" 
             type="password" 
             required
-            class="bg-black/50 border-white/20 text-white focus:border-[#2dd4bf] focus:ring-1 focus:ring-[#2dd4bf]/50 transition-all h-11" 
+            class="w-full px-4 rounded-md bg-black/50 border border-white/20 text-white focus:border-[#2dd4bf] focus:outline-none focus:ring-1 focus:ring-[#2dd4bf]/50 transition-all h-11" 
           />
         </div>
 
