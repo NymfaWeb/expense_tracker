@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   
   components: [
-    { path: './shared/ui', pathPrefix: false },
     { path: './widgets', pathPrefix: false },
     { path: './features', pathPrefix: false },
   ],
@@ -25,6 +24,12 @@ export default defineNuxtConfig({
 
   build: {
     transpile: ['shared', 'widgets', 'features']
+  },
+
+  vite: {
+    ssr: {
+      noExternal: [/\.vue$/, /shared/, /widgets/, /features/]
+    }
   },
 
   tailwindcss: {
