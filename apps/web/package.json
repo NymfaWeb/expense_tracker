@@ -15,10 +15,12 @@
     "@nuxt/ui": "^2.15.2",
     "@pinia/nuxt": "^0.5.1",
     "@tanstack/vue-query": "^5.28.9",
+    "clsx": "^2.1.1",
     "lucide-vue-next": "^0.364.0",
     "nuxt": "^3.11.1",
     "pinia": "^2.1.7",
     "radix-vue": "^1.7.0",
+    "tailwind-merge": "^3.6.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
