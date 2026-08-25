@@ -15,7 +15,7 @@ const handleSubmit = () => {
 
 <template>
   <Card class="w-full bg-card/40 backdrop-blur-xl border-white/10 shadow-2xl overflow-hidden relative">
-    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-[#2dd4bf]/5 to-[#2dd4bf]/10 pointer-events-none"></div>
     
     <div class="p-8 relative z-10">
       <div class="space-y-1 mb-8 text-center">
@@ -32,21 +32,21 @@ const handleSubmit = () => {
             type="email" 
             placeholder="name@example.com" 
             required 
-            class="bg-background/50 border-white/10 focus:border-indigo-500 transition-colors"
+            class="bg-background/50 border-white/10 focus:border-[#2dd4bf] transition-colors"
           />
         </div>
         
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <Label for="password">Password</Label>
-            <a href="#" class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">Forgot password?</a>
+            <a href="#" class="text-xs text-[#2dd4bf] hover:text-[#2dd4bf]/80 transition-colors">Forgot password?</a>
           </div>
           <Input 
             id="password" 
             v-model="password" 
             type="password" 
             required
-            class="bg-background/50 border-white/10 focus:border-indigo-500 transition-colors" 
+            class="bg-background/50 border-white/10 focus:border-[#2dd4bf] transition-colors" 
           />
         </div>
 
@@ -56,7 +56,7 @@ const handleSubmit = () => {
 
         <Button 
           type="submit" 
-          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-lg shadow-indigo-500/20 mt-2"
+          class="w-full bg-[#2dd4bf] hover:bg-[#2dd4bf]/90 text-black transition-all shadow-lg shadow-[#2dd4bf]/20 mt-2"
           :disabled="isPending"
         >
           <Loader2 v-if="isPending" class="mr-2 h-4 w-4 animate-spin" />
@@ -68,7 +68,7 @@ const handleSubmit = () => {
     <div class="border-t border-white/10 p-6 bg-black/20 text-center relative z-10">
       <p class="text-sm text-muted-foreground">
         Don't have an account? 
-        <a href="#" class="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">Create one</a>
+        <a href="#" class="text-[#2dd4bf] hover:text-[#2dd4bf]/80 font-medium transition-colors">Create one</a>
       </p>
     </div>
   </Card>
