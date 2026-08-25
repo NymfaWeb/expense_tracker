@@ -3,18 +3,18 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   
   components: [
-    { path: '~/shared/ui', pathPrefix: false },
-    { path: '~/widgets', pathPrefix: false },
-    { path: '~/features', pathPrefix: false },
+    { path: './shared/ui', pathPrefix: false },
+    { path: './widgets', pathPrefix: false },
+    { path: './features', pathPrefix: false },
   ],
 
   // Auto-import composables z FSD
   imports: {
     dirs: [
-      'shared/lib',
-      'shared/api',
-      'entities/**/model',
-      'entities/**/api'
+      './shared/lib',
+      './shared/api',
+      './entities/**/model',
+      './entities/**/api'
     ]
   },
 
