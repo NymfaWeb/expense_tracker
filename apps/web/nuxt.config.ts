@@ -1,35 +1,28 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  
+
   components: [
+    { path: './components', pathPrefix: false },
     { path: './widgets', pathPrefix: false },
     { path: './features', pathPrefix: false },
   ],
 
   // Auto-import composables z FSD
   imports: {
-    dirs: [
-      './shared/lib',
-      './shared/api',
-      './entities/**/model',
-      './entities/**/api'
-    ]
+    dirs: ['./shared/lib', './shared/api', './entities/**/model', './entities/**/api'],
   },
 
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt'
-  ],
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 
   build: {
-    transpile: ['shared', 'widgets', 'features']
+    transpile: ['shared', 'widgets', 'features'],
   },
 
   vite: {
     ssr: {
-      noExternal: [/\.vue$/, /shared/, /widgets/, /features/]
-    }
+      noExternal: [/\.vue$/, /shared/, /widgets/, /features/],
+    },
   },
 
   tailwindcss: {
@@ -37,5 +30,5 @@ export default defineNuxtConfig({
     configPath: 'tailwind.config.ts',
   },
 
-  compatibilityDate: '2024-08-25'
+  compatibilityDate: '2024-08-25',
 })

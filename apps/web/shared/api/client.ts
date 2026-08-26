@@ -1,11 +1,11 @@
 export const apiClient = $fetch.create({
   baseURL: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
-  credentials: 'omit',
-  
+  credentials: 'include',
+
   onRequest({ options }) {
     options.headers = {
       ...options.headers,
-      'Accept': 'application/json',
+      Accept: 'application/json',
     }
   },
 
@@ -14,8 +14,7 @@ export const apiClient = $fetch.create({
     if (response.status === 401) {
       console.warn('Unauthorized request. Redirecting...')
     }
-    
-  }
+  },
 })
 
 // Typy pomocnicze

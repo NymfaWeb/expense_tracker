@@ -17,13 +17,13 @@ export function useLoginMutation() {
     onSuccess: (user) => {
       // Aktualizujemy stan UI (Pinia)
       store.setUser(user)
-      // Przekierowujemy na dashboard
-      router.push('/')
+      // Przekierowujemy na dashboard z pełnym odświeżeniem, aby uniknąć problemów z hydratacją po zalogowaniu
+      window.location.href = '/'
     },
     onError: (error) => {
       console.error('Błąd logowania:', error)
       // W prawdziwym kodzie odpalamy tu np. Toast notification "Invalid credentials"
-    }
+    },
   })
 }
 
@@ -38,6 +38,6 @@ export function useLogoutMutation() {
     onSuccess: () => {
       store.logout()
       router.push('/login')
-    }
+    },
   })
 }
