@@ -1,7 +1,16 @@
-import { Controller, Post, Body, Res, Get, Req, UseGuards, UnauthorizedException } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { Response, Request } from 'express';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Get,
+  Req,
+  UseGuards,
+  UnauthorizedException,
+} from '@nestjs/common'
+import { AuthService } from './auth.service'
+import { Response, Request } from 'express'
+import { JwtAuthGuard } from './jwt-auth.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -14,39 +23,39 @@ export class AuthController {
       passwordHash: body.password,
       firstName: body.firstName,
       lastName: body.lastName,
-    });
+    })
   }
 
   @Post('login')
   async login(@Body() body: any, @Res({ passthrough: true }) response: Response) {
-    const user = await this.authService.validateUser(body.email, body.password);
+    const user = await this.authService.validateUser(body.email, body.password)
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Invalid credentials')
     }
 
-    const { access_token, user: userData } = await this.authService.login(user);
+    const { access_token, user: userData } = await this.authService.login(user)
 
-    // Ustawienie HttpOnly ciasteczka
+    // Ustawienie HttpOnly ciasteczka (zmienione na false dla Nuxt useCookie)
     response.cookie('Authentication', access_token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24,
-    });
+    })
 
-    return userData;
+    return userData
   }
 
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('Authentication');
-    return { message: 'Logged out successfully' };
+    response.clearCookie('Authentication')
+    return { message: 'Logged out successfully' }
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@Req() req: Request) {
-    return req.user;
+    return req.user
   }
 }
