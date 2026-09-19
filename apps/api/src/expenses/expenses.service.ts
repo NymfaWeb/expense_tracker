@@ -1,7 +1,7 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { and, eq, gte, lte, sql } from 'drizzle-orm';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../database/schema';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common'
+import { and, eq, gte, lte, sql } from 'drizzle-orm'
+import { NodePgDatabase } from 'drizzle-orm/node-postgres'
+import * as schema from '../database/schema'
 
 @Injectable()
 export class ExpensesService {
@@ -11,21 +11,37 @@ export class ExpensesService {
   ) {}
 
   private async getOrCreateDefaultCategory(userId: string) {
-    let defaultCat = await this.db.select().from(schema.categories).where(eq(schema.categories.userId, userId)).limit(1);
+    let defaultCat = await this.db
+      .select()
+      .from(schema.categories)
+      .where(eq(schema.categories.userId, userId))
+      .limit(1)
     if (!defaultCat.length) {
-      const created = await this.db.insert(schema.categories).values({
-        userId,
-        name: 'General',
-        color: '#6366f1', // Indigo
-      }).returning();
-      return created[0].id;
+      const created = await this.db
+        .insert(schema.categories)
+        .values({
+          userId,
+          name: 'General',
+          color: '#6366f1', // Indigo
+        })
+        .returning()
+      return created[0].id
     }
-    return defaultCat[0].id;
+    return defaultCat[0].id
   }
 
-  async create(userId: string, data: { amount: string, title: string, expenseDate: string, isBusiness?: boolean }) {
-    const categoryId = await this.getOrCreateDefaultCategory(userId);
-    
+  async create(
+    userId: string,
+    data: {
+      amount: string
+      title: string
+      expenseDate: string
+      isBusiness?: boolean
+      categoryId?: string
+    },
+  ) {
+    const categoryId = data.categoryId || (await this.getOrCreateDefaultCategory(userId))
+
     const result = await this.db
       .insert(schema.expenses)
       .values({
@@ -36,19 +52,56 @@ export class ExpensesService {
         expenseDate: data.expenseDate,
         isBusiness: data.isBusiness ?? false,
       })
-      .returning();
-    
-    return result[0];
+      .returning()
+
+    return result[0]
   }
 
-  async findAll(userId: string, filters: { type?: 'all' | 'private' | 'business', start?: string, end?: string }) {
-    let conditions = [eq(schema.expenses.userId, userId)];
+  async update(
+    userId: string,
+    expenseId: string,
+    data: {
+      amount?: string
+      title?: string
+      expenseDate?: string
+      isBusiness?: boolean
+      categoryId?: string
+    },
+  ) {
+    const result = await this.db
+      .update(schema.expenses)
+      .set({
+        ...data,
+        updatedAt: new Date().toISOString(),
+      })
+      .where(and(eq(schema.expenses.id, expenseId), eq(schema.expenses.userId, userId)))
+      .returning()
 
-    if (filters.type === 'private') conditions.push(eq(schema.expenses.isBusiness, false));
-    if (filters.type === 'business') conditions.push(eq(schema.expenses.isBusiness, true));
-    
-    if (filters.start) conditions.push(gte(schema.expenses.expenseDate, filters.start));
-    if (filters.end) conditions.push(lte(schema.expenses.expenseDate, filters.end));
+    if (!result.length) throw new NotFoundException('Expense not found')
+    return result[0]
+  }
+
+  async delete(userId: string, expenseId: string) {
+    const result = await this.db
+      .delete(schema.expenses)
+      .where(and(eq(schema.expenses.id, expenseId), eq(schema.expenses.userId, userId)))
+      .returning()
+
+    if (!result.length) throw new NotFoundException('Expense not found')
+    return { success: true }
+  }
+
+  async findAll(
+    userId: string,
+    filters: { type?: 'all' | 'private' | 'business'; start?: string; end?: string },
+  ) {
+    let conditions = [eq(schema.expenses.userId, userId)]
+
+    if (filters.type === 'private') conditions.push(eq(schema.expenses.isBusiness, false))
+    if (filters.type === 'business') conditions.push(eq(schema.expenses.isBusiness, true))
+
+    if (filters.start) conditions.push(gte(schema.expenses.expenseDate, filters.start))
+    if (filters.end) conditions.push(lte(schema.expenses.expenseDate, filters.end))
 
     return await this.db
       .select({
@@ -62,23 +115,23 @@ export class ExpensesService {
           id: schema.categories.id,
           name: schema.categories.name,
           color: schema.categories.color,
-        }
+        },
       })
       .from(schema.expenses)
       .leftJoin(schema.categories, eq(schema.expenses.categoryId, schema.categories.id))
       .where(and(...conditions))
-      .orderBy(schema.expenses.expenseDate); // chronologicznie
+      .orderBy(schema.expenses.expenseDate) // chronologicznie
   }
 
   async getSummary(userId: string) {
     const result = await this.db
       .select({
         totalExpenses: sql<number>`COALESCE(SUM(${schema.expenses.amount}::numeric), 0)::float`,
-        activeSubscriptions: sql<number>`COUNT(*) FILTER (WHERE ${schema.expenses.title} ILIKE '%sub%')::int`
+        activeSubscriptions: sql<number>`COUNT(*) FILTER (WHERE ${schema.expenses.title} ILIKE '%sub%')::int`,
       })
       .from(schema.expenses)
-      .where(eq(schema.expenses.userId, userId));
-      
-    return result[0] || { totalExpenses: 0, activeSubscriptions: 0 };
+      .where(eq(schema.expenses.userId, userId))
+
+    return result[0] || { totalExpenses: 0, activeSubscriptions: 0 }
   }
 }

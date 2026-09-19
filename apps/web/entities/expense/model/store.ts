@@ -16,13 +16,14 @@ export const useExpenseStore = defineStore('expense', {
       type: 'all' as ExpenseTypeFilter,
       dateRange: {
         start: null,
-        end: null
-      }
+        end: null,
+      },
     } as ExpenseFilters,
-    
+
     isAddExpenseModalOpen: false,
+    editingExpense: null as any | null,
   }),
-  
+
   actions: {
     setFilterType(type: ExpenseTypeFilter) {
       this.filters.type = type
@@ -30,8 +31,12 @@ export const useExpenseStore = defineStore('expense', {
     setDateRange(start: string, end: string) {
       this.filters.dateRange = { start, end }
     },
-    toggleAddExpenseModal() {
+    toggleAddExpenseModal(expenseToEdit?: any) {
+      this.editingExpense = expenseToEdit || null
       this.isAddExpenseModalOpen = !this.isAddExpenseModalOpen
-    }
-  }
+      if (!this.isAddExpenseModalOpen) {
+        this.editingExpense = null
+      }
+    },
+  },
 })

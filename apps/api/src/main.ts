@@ -1,19 +1,30 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './app.module'
+import { ValidationPipe } from '@nestjs/common'
+import * as cookieParser from 'cookie-parser'
+import helmet from 'helmet'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  
-  app.use(cookieParser());
+  const app = await NestFactory.create(AppModule)
+
+  app.use(helmet())
+  app.use(cookieParser())
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  )
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Port Nuxta w trybie dev, na prod URL z Vercel
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
-  });
+  })
 
-  const port = process.env.PORT || 4000;
-  await app.listen(port);
-  console.log(`API is running on: http://localhost:${port}`);
+  const port = process.env.PORT || 4000
+  await app.listen(port)
+  console.log(`API is running on: http://localhost:${port}`)
 }
-bootstrap();
+bootstrap()
